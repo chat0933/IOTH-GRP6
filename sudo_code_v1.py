@@ -26,6 +26,10 @@ Hvis de står op så gør ikke noget
 hvis de er faldet så giv lyd
 (Vi skal lige blive enige om buzzeren skal give lyd i andre situationer)
 
+GPS:
+Fortæl lægerne hvor patienten befinde sig
+hvis der er hjerteproblemer eller personen er faldet så send data ind i DB
+
 DB:
 modtager data fra vores komponenter og alt afhængig af hvad der er problemet giver den signal til lægerne
 hvis der kun er 1 problem så er resten af felterne tomme
