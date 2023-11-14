@@ -54,3 +54,4 @@ Hjemmside:
 - https: Vi vil opnå https gennem hosting på azure appservice
 - MQTT sender vores data fra database til hjemmeside
 """
+# Ny version
