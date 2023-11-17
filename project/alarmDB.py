@@ -15,9 +15,12 @@ cur = con.cursor()
 
 def create_patient_table():
     cur.execute('CREATE TABLE IF NOT EXISTS Issues(PATIENT_ID INT, FALLEN TEXT, HEARTH_RATE INT, GPS1 REAL, GPS2 REAL)')
-    
+
+def create_user_table():
+    cur.execute('CREATE TABLE IF NOT EXISTS Users(USERNAME TEXT, PASSWORD TEXT)')    
 
 create_patient_table()
+create_user_table()
 
 def test_insert():
     cur.execute('INSERT INTO Issues(PATIENT_ID, FALLEN, HEARTH_RATE, GPS1, GPS2) VALUES (?, ?, ?, ?, ?)', (PATIENT_ID,FALLEN, HEARTH_RATE,GPS1,GPS2))
@@ -26,3 +29,4 @@ def test_insert():
     print("Inserted test into db")
 
 test_insert()
+
