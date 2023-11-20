@@ -1,14 +1,18 @@
 import sqlite3
 
+
+
+"""
 PATIENT_ID = 1
 FALLEN = "TRUE"
 HEARTH_RATE = 123
 GPS1 = 666.666
 GPS2 = 6969.6969
+"""
 
 print("HEY")
 
-database = ('patient_database.db')
+database = ('plejehjem_database.db')
 
 con = sqlite3.connect(database)
 cur = con.cursor()
@@ -19,8 +23,8 @@ def create_patient_table():
 def create_user_table():
     cur.execute('CREATE TABLE IF NOT EXISTS Users(USERNAME TEXT, PASSWORD TEXT)')    
 
-create_patient_table()
-create_user_table()
+#create_patient_table()
+#create_user_table()
 
 def test_insert():
     cur.execute('INSERT INTO Issues(PATIENT_ID, FALLEN, HEARTH_RATE, GPS1, GPS2) VALUES (?, ?, ?, ?, ?)', (PATIENT_ID,FALLEN, HEARTH_RATE,GPS1,GPS2))
@@ -28,5 +32,5 @@ def test_insert():
     cur.close()
     print("Inserted test into db")
 
-test_insert()
+#test_insert()
 
