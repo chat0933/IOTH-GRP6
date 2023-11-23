@@ -16,7 +16,7 @@ con = sqlite3.connect(database)
 cur = con.cursor()
 
 def create_patient_table():
-    cur.execute('CREATE TABLE IF NOT EXISTS Issues(PATIENT_ID INT, FALLEN TEXT, HEARTH_RATE INT, GPS1 REAL, GPS2 REAL)')
+    cur.execute('CREATE TABLE IF NOT EXISTS Patient_Issues(PATIENT_ID INT, FALLEN TEXT, HEARTH_RATE INT, GPS1 REAL, GPS2 REAL)')
     con.commit
 
 def create_user_table():
@@ -27,13 +27,19 @@ def create_user_account(username,password): #Use this function to save the creat
     cur.execute('INSERT INTO users(username, password) VALUES (?, ?)', (username, password))
     con.commit
 
-create_patient_table()
-create_user_table()
+def insert_issues(PATIENT_ID,FALLEN, HEARTH_RATE,GPS1,GPS2):
+    cur.execute('INSERT INTO Patient_Issues(PATIENT_ID, FALLEN, HEARTH_RATE, GPS1, GPS2) VALUES (?, ?, ?, ?, ?)', (PATIENT_ID,FALLEN, HEARTH_RATE,GPS1,GPS2))
+
+#create_patient_table()
+#create_user_table()
 
 def test_insert():
     username = "hejsa1"
     password = "test2"
-    cur.execute('INSERT INTO Issues(PATIENT_ID, FALLEN, HEARTH_RATE, GPS1, GPS2) VALUES (?, ?, ?, ?, ?)', (PATIENT_ID,FALLEN, HEARTH_RATE,GPS1,GPS2))
+    create_patient_table()
+    create_user_table()
+    #cur.execute('INSERT INTO Patient_Issues(PATIENT_ID, FALLEN, HEARTH_RATE, GPS1, GPS2) VALUES (?, ?, ?, ?, ?)', (PATIENT_ID,FALLEN, HEARTH_RATE,GPS1,GPS2))
+    insert_issues(PATIENT_ID,FALLEN,HEARTH_RATE,GPS1,GPS2)
     create_user_account(username,password)
     con.commit()
     cur.close()
