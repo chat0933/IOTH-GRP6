@@ -1,7 +1,7 @@
-from flask import Flask, redirect, url_for, render_template, request, session, flash, jsonify
+from flask import Flask, redirect, url_for, render_template, request, session, flash
 from datetime import timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
-from alarmDB import create_user_table_chris, create_issues_table_chris
+from alarm_db import create_user_table_chris, create_issues_table_chris
 import sqlite3
 
 app = Flask(__name__)
@@ -82,16 +82,22 @@ def logout():
 @app.route("/dashboard")
 def update_dashboard():
     
-    create_issues_table_chris() 
+    create_issues_table_chris()  # Make sure your table is created before querying it
     conn = sqlite3.connect("patient_database.db")
     cur = conn.cursor()
-    cur.execute("INSERT INTO Issues (PATIENT_ID, FALLEN, HEARTH_RATE, GPS1, GPS2) VALUES (?, ?, ?, ?, ?)")
-    conn.commit()
+    
+    # Execute the SQL query
+    cur.execute("SELECT * FROM Issues ORDER BY PATIENT_ID DESC LIMIT 30")
+    
+    # Fetch all rows
+    patient_data = cur.fetchall()
+    
+    # Close the cursor and connection when done
+    cur.close()
     conn.close()
-    patient_data = ("SELECT * FROM Issues ORDER BY PATIENT_ID DESC LIMIT 30")
-    return render_template("dashboard", jsonify(patient_data))
-
-
+    
+    # Render the template with the fetched data
+    return render_template("dashboard.html", patient_data=patient_data)
 
 
 if __name__ == "__main__":
