@@ -1,31 +1,67 @@
-from flask import Flask, redirect, url_for, render_template, request, session, flash
+from flask import Flask, redirect, url_for, render_template, request, session, flash, jsonify
 from datetime import timedelta
+from werkzeug.security import generate_password_hash, check_password_hash
+from alarmDB import create_user_table_chris, create_issues_table_chris
+import sqlite3
 
 app = Flask(__name__)
 app.secret_key = "abemadXD"
 app.permanent_session_lifetime = timedelta(minutes=5)
 
 @app.route("/")
-def home():
+def index():
     return render_template("index.html")
 
-@app.route("/register", methods= ["POST", "GET"])
+@app.route("/home")
+def home():
+    return render_template("home.html")
 
+@app.route("/register", methods= ["POST", "GET"])
+def register():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+
+        # Hash the password before storing it in the database
+        hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+        create_user_table_chris() 
+        conn = sqlite3.connect("patient_database.db")
+        cur = conn.cursor()
+        cur.execute("INSERT INTO users (USERNAME, PASSWORD) VALUES (?, ?)", (username, hashed_password))
+        conn.commit()
+        conn.close()
+
+        flash(f"Registration successful, {username}! Please log in.")
+        return redirect(url_for("login"))
+    else:
+        return render_template("register.html")
 
 
 @app.route("/login", methods= ["POST", "GET"])
 def login():
     if request.method == "POST":
         session.permanent = True
-        user = request.form["nm"]
-        session["user"] = user
-        flash(f"Velkommen til Rynkeby, Mr. {user}")
-        return redirect(url_for("user"))
+        entered_username = request.form["username"]
+        entered_password = request.form["password"]
+
+        conn = sqlite3.connect("patient_database.db")
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM Users WHERE USERNAME=?", (entered_username,))
+        user = cur.fetchone()
+        conn.close()
+
+        if user and check_password_hash(user[1], entered_password):
+            # user[2] is the hashed password stored in the database
+            session["user"] = entered_username
+            flash(f"Welcome to Rynkeby, Mr. {entered_username}")
+            return redirect(url_for("user"))
+        else:
+            flash("Invalid username or password. Please try again.", "error")
+            return redirect(url_for("login"))
     else:
         if "user" in session:
-            flash(f"Du er allerede logget ind {user}! Er du gammel eller hva?")
+            flash(f"You are already logged in, {session['user']}! Are you old or what?")
             return redirect(url_for("user"))
-        
         return render_template("login.html")
 
 @app.route("/user")
@@ -42,6 +78,20 @@ def logout():
     flash("Tak for denne gang, vi savner dig allerede", "info")
     session.pop("user", None)
     return redirect(url_for("login"))
+
+@app.route("/dashboard")
+def update_dashboard():
+    
+    create_issues_table_chris() 
+    conn = sqlite3.connect("patient_database.db")
+    cur = conn.cursor()
+    cur.execute("INSERT INTO Issues (PATIENT_ID, FALLEN, HEARTH_RATE, GPS1, GPS2) VALUES (?, ?, ?, ?, ?)")
+    conn.commit()
+    conn.close()
+    patient_data = ("SELECT * FROM Issues ORDER BY PATIENT_ID DESC LIMIT 30")
+    return render_template("dashboard", jsonify(patient_data))
+
+
 
 
 if __name__ == "__main__":

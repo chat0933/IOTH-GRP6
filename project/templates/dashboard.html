@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- Add this script tag in the <head> section of your HTML -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        function updateDashboard() {
+            $.get('/update_dashboard', function (data) {
+                // Assuming you have a function to update the HTML content
+                updateTable(data);
+            });
+        }
+
+        // Update the dashboard every 10 seconds (adjust as needed)
+        setInterval(updateDashboard, 10000);
+
+        // Initial call to load data on page load
+        updateDashboard();
+    });
+
+    function updateTable(data) {
+        // Update your HTML table with the new data
+        // You might need to clear existing rows and append new ones
+        // Example: Replace the tbody content with new rows
+        var tbody = $('table tbody');
+        tbody.empty();
+
+        for (var i = 0; i < data.length; i++) {
+            var row = '<tr>';
+            row += '<td>' + data[i][0] + '</td>';
+            row += '<td>' + data[i][1] + '</td>';
+            row += '<td>' + data[i][2] + '</td>';
+            row += '<td>' + data[i][3] + '</td>';
+            row += '<td>' + data[i][4] + '</td>';
+            // Add more cells based on your database schema
+            row += '</tr>';
+            tbody.append(row);
+        }
+    }
+</script>
+{% endblock %}

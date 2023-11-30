@@ -30,3 +30,12 @@ def test_insert():
 
 test_insert()
 
+def create_user_table_chris():
+    with sqlite3.connect("patient_database.db") as conn:
+        cur = conn.cursor()
+        cur.execute('CREATE TABLE IF NOT EXISTS Users(ID INTEGER PRIMARY KEY AUTOINCREMENT, USERNAME TEXT, PASSWORD TEXT)')
+
+def create_issues_table_chris():
+    with sqlite3.connect("patient_database.db") as conn:
+        cur = conn.cursor()
+        cur.execute('CREATE TABLE IF NOT EXISTS Issues(ID INTEGER PRIMARY KEY AUTOINCREMENT, PATIENT_ID, FALLEN, HEARTH_RATE, GPS1, GPS2)')
