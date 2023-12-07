@@ -6,32 +6,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+        integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+        crossorigin="anonymous"></script>
 </head>
 <body>
-    <h1>Dashboard</h1>
-    
-    <table>
-        <tr>
-            <th>PATIENT_ID</th>
-            <th>FALLEN</th>
-            <th>HEARTH_RATE</th>
-            <th>GPS1</th>
-            <th>GPS2</th>
-        </tr>
-        {% for row in patient_data %}
-            <tr>
-                <td>{{ row[0] }}</td>
-                <td>{{ row[1] }}</td>
-                <td>{{ row[2] }}</td>
-                <td>{{ row[3] }}</td>
-                <td>{{ row[4] }}</td>
-            </tr>
-        {% endfor %}
-    </table>
+    <h1>Patienter</h1>
+    <script>
+        var socket = io();
+        socket.emit('patient_database')	
+        socket.on('PD', function(patient_data) {
+            console.log(patient_data);
+            let [Value0, Value1, Value2, Value3, Value4] = patient_data;
+            if (patient_data !== 'None') {
+                document.getElementById('PATIENT_ID').innerText = Value0;
+                document.getElementById('FALLEN').innerText = Value1;
+                document.getElementById('HEARTH_RATE').innerText = Value2;
+                document.getElementById('GPS1').innerText = Value3;
+                document.getElementById('GPS2').innerText = Value4;
+            }
+            socket.emit('PD');
+        })
+    </script>
+        <div class="grid">
+            <div class="gridit"><h3>PATIENT_ID</h3></div>
+            <div class="gridit"><h3>FALLEN</h3></div>
+            <div class="gridit"><h3>HEARTH_RATE</h3></div>
+            <div class="gridit"><h3>GPS1</h3></div>
+            <div class="gridit"><h3>GPS2</h3></div>
+            <div id="PATIENT_ID"></div>
+            <div id="FALLEN"></div>
+            <div id="HEARTH_RATE"></div>
+            <div id="GPS1"></div>
+            <div id="GPS2"></div>
+        </div>
 </body>
 </html>
-
 {% endblock %}
+

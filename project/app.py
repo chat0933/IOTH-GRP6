@@ -2,11 +2,26 @@ from flask import Flask, redirect, url_for, render_template, request, session, f
 from datetime import timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 from alarm_db import create_user_table_chris, create_issues_table_chris
+from flask_socketio import SocketIO, emit
 import sqlite3
 
 app = Flask(__name__)
+socketio = SocketIO(app)
+
 app.secret_key = "abemadXD"
 app.permanent_session_lifetime = timedelta(minutes=5)
+
+###Routes
+#the main socketio that emites to the webpage
+@socketio.on('patient_database')
+def PatientData():
+    value0 = 'PATIENT_ID' 
+    value1 = 'FALLEN'
+    value2 = 'HEARTH_RATE'
+    value3 = 'GPS1'
+    value4 = 'GPS2'
+    Data = [value0, value1, value2, value3, value4]
+    socketio.emit('PD', Data)
 
 @app.route("/")
 def index():
@@ -101,4 +116,4 @@ def update_dashboard():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    socketio.run(app, host='0.0.0.0', debug=True)
