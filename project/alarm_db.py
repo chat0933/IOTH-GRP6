@@ -1,5 +1,9 @@
 import sqlite3
 # Skriv ind i DB så snart der opstår et problem uanset om det er hjerte releateret eller om de er fladet
+import gps
+import ekg_ecg
+import gyro
+
 
 PATIENT_ID = 1
 FALLEN = "TRUE"
@@ -26,6 +30,13 @@ def create_user_table():
 def create_user_account(username,password): #Use this function to save the created user from app.py into our database
     cur.execute('INSERT INTO users(username, password) VALUES (?, ?)', (username, password))
     con.commit
+
+def get_user_account(Users):
+    print("Test")
+    cur.execute(f"SELECT * FROM {Users}")
+    columns = [description[0] for description in cur.description]
+    rows = cur.fetchall()
+    return columns, rows
 
 def insert_issues(PATIENT_ID,FALLEN, HEARTH_RATE,GPS1,GPS2):
     cur.execute('INSERT INTO Patient_Issues(PATIENT_ID, FALLEN, HEARTH_RATE, GPS1, GPS2) VALUES (?, ?, ?, ?, ?)', (PATIENT_ID,FALLEN, HEARTH_RATE,GPS1,GPS2))
