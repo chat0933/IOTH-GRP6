@@ -43,8 +43,6 @@ def run_imu():
                 
         #Dette bruges til at teste og finde ud af hvad de rigtige tal ville være 
         if accel_x < 650:
-        #if accel_y == 100:
-                #led.set_colour_red()
             print("Danger")
             return "imu_danger"
         else:
@@ -54,11 +52,7 @@ def run_imu():
                 
     
 
-        #led.reset_colour()
-            
 
-        # Der skal nok være noget return her
-        #time.sleep(1)
     except KeyboardInterrupt:
         print("Turning off LED and GPS")
 
