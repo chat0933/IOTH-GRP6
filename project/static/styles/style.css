@@ -1,0 +1,40 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+.gridit {
+    background-color: #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+#PATIENT_ID, #FALLEN, #HEARTH_RATE, #GPS1, #GPS2 {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Additional styling for individual elements if needed */
+#PATIENT_ID { background-color: #66c2ff; color: #fff; }
+#FALLEN { background-color: #ff6666; color: #fff; }
+#HEARTH_RATE { background-color: #99ff99; color: #333; }
+#GPS1 { background-color: #ffb366; color: #fff; }
+#GPS2 { background-color: #cc99ff; color: #fff; }

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IOHT</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+	integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+	crossorigin="anonymous"></script>
+</head>
+<body>
+    <h1>PILLESORTERING</h1>
+    <script>
+		var socket = io();
+		socket.emit('patientData')	
+		socket.on('PD', function(data) {
+            	console.log(data)
+		let [Value0, Value1, Value2] = "test"//data
+			if (data != 'None') {
+				document.getElementById('PatientNavn').innerText = Value0
+				document.getElementById('pilletype').innerText = Value1
+				document.getElementById('antal').innerText = Value2
+			}
+			socket.emit('hentTemp')
+					})
+	</script>
+<div class="grid">
+    <div class="gridit"><h3>NAVN</h3></div>
+    <div class="gridit"><h3>PILLER</h3></div>
+    <div class="gridit"><h3>antal</h3></div>
+    <div id="PatientNavn"></div>
+    <div id="pilletype"></div>
+    <div id="antal"></div>
+</div>
+<div class="tempdata">Temp: <br> Humd: </div>
+</body>
+</html>
+<footer>
+	<p>Lavet af gruppe B9 - KEA IT-Teknolog 2B F23</p>
+	<p class="right">Emil Pehrson, Daniel Nybo, Marcus Andersen, Mikael Slots</p>
+</footer>
