@@ -1,6 +1,6 @@
 import smbus
 import time
-import led
+#import led
 
 # I2C bus (use 1 for Raspberry Pi)
 bus = smbus.SMBus(1)
@@ -25,31 +25,45 @@ def read_word_2c(reg):
         return val
 
 def run_imu():
-    while True:
-        try:
-            # Read accelerometer data
-            accel_x = read_word_2c(0x3B)
-            accel_y = read_word_2c(0x3D)
-            accel_z = read_word_2c(0x3F)
+    try:
+        # Read accelerometer data
+        accel_x = read_word_2c(0x3B)
+        accel_y = read_word_2c(0x3D)
+        accel_z = read_word_2c(0x3F)
 
-            # Read gyroscope data
-            gyro_x = read_word_2c(0x43)
-            gyro_y = read_word_2c(0x45)
-            gyro_z = read_word_2c(0x47)
+                # Read gyroscope data
+        gyro_x = read_word_2c(0x43)
+        gyro_y = read_word_2c(0x45)
+        gyro_z = read_word_2c(0x47)
 
-            print(f"Accelerometer: X={accel_x}, Y={accel_y}, Z={accel_z}")
-            print(f"Gyroscope: X={gyro_x}, Y={gyro_y}, Z={gyro_z}")
+        print(f"Accelerometer: X={accel_x}, Y={accel_y}, Z={accel_z}")
+        print(f"Gyroscope: X={gyro_x}, Y={gyro_y}, Z={gyro_z}")
 
+        time.sleep(1.5)
+                
+        #Dette bruges til at teste og finde ud af hvad de rigtige tal ville være 
+        if accel_x < 650:
+        #if accel_y == 100:
+                #led.set_colour_red()
+            print("Danger")
+            return "imu_danger"
+        else:
+            print("Nothin is wrong")
+            return "imu_good"
+            #return "All Good"
+                
+    
+
+        #led.reset_colour()
             
-            #Dette bruges til at teste og finde ud af hvad de rigtige tal ville være 
-            if accel_x < -200:
-                return "True"
-            else:
-                print("Nothing is wrong")
-            
 
-            # Der skal nok være noget return her
-            time.sleep(1)
-        except KeyboardInterrupt:
-            print("Turning off LED and GPS")
-            led.turn_off()
+        # Der skal nok være noget return her
+        #time.sleep(1)
+    except KeyboardInterrupt:
+        print("Turning off LED and GPS")
+
+    #led.turn_off()
+
+
+#while True:
+#run_imu()

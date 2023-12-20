@@ -1,8 +1,7 @@
 import zmq
 import json
-#from led import set_colour_red,reset_colour,turn_off
+from led import set_colour_red,reset_colour,turn_off
 import time
-#import gyro
 import sqlite3
 import alarm_db as database
 
@@ -15,24 +14,20 @@ context = zmq.Context()
 
 # Create a SUB socket
 socket = context.socket(zmq.SUB)
-#socket.connect("tcp://:5555")
-socket.connect("tcp://:5555") #Ændrer denne ip til senderens IP-addresse
+socket.connect("tcp://your_ip_address:5555")
 socket.subscribe(b"")
 
-# Her skal der være LED som lyser afhænging af IMUs besked og en buzzer som larmer
+
 # Receive and print messages
 def recieve_rpi_data():
     try:
-        #led.no_warning()
         while True:
             message = socket.recv_string()
             message_data = json.loads(message)
             print(f"Received: {message}")
 
             if "FALLEN" in message: #Denne besked skal modtages fra imu
-                #Prøv måske at tage nogle statiske værdier på det hele og så send det
                 print("SOMEONE HAS FALLEN IN BATTLE AND THEY CANT GET UP!")
-                #set_colour_red() # Har lavet en test som virker fra computeren, men har ikke sendt fra en RPi
                 #time.sleep(2)
                 
                 fallen_value = message_data.get("FALLEN", "True") 
@@ -45,12 +40,11 @@ def recieve_rpi_data():
                 (fallen_value, heart_rate_value, gpslat_value, gpslng_value))
 
                 con.commit()
-
-                #set_colour_red()
+                set_colour_red()
                 
 
             else:
-                #reset_colour()
+                reset_colour()
                 #continue
                 print("ALl good")
                 time.sleep(5)
@@ -59,7 +53,7 @@ def recieve_rpi_data():
         # Close the socket and context on KeyboardInterrupt (Ctrl+C)
         socket.close()
         context.term()
-        #turn_off()
+        turn_off()
         con.close()
         print("Connection closed.")
     
